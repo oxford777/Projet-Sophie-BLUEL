@@ -2,6 +2,7 @@
 const galerie = document.querySelector(".gallery");
 const filtres = document.getElementById("filtres");
 
+
 async function obtenirDonneesServeur (){ 
     try{
         const reponseServeur = await fetch ("http://localhost:5678/api/works"); 
@@ -49,6 +50,7 @@ async function filtresServeur() {
 
 function genererBoutons (listeBtnFiltres, listeTravaux){ 
     filtres.innerHTML = ""; 
+
     const btnTous = document.createElement("button"); 
     btnTous.textContent = "Tous"; 
     btnTous.classList.add ("bouton-filtres"); 
@@ -65,13 +67,12 @@ function genererBoutons (listeBtnFiltres, listeTravaux){
 
     filtres.appendChild(btnTous); 
 
-    listeBtnFiltres.forEach(function(categorie){ /* c’est le tableau de la variable "listeBtnFiltres" qui contient toutes les catégories venant de l’API et "categorie" contient un element de chaque categorie */
-    const btnCategorie = document.createElement("button"); /* chaque categorie aura son bouton html */
-        btnCategorie.textContent = categorie.name; /* on définit le texte de chaque bouton inscrit dans "name" dans l'API */
-        btnCategorie.classList.add("bouton-filtres"); /* applique le style css à chaque bouton */
+    listeBtnFiltres.forEach(function(categorie){ 
+    const btnCategorie = document.createElement("button"); 
+        btnCategorie.textContent = categorie.name;
+        btnCategorie.classList.add("bouton-filtres"); 
 
         btnCategorie.addEventListener("click", function(){
-/* On enlève "actif" de tous les boutons */
         const tousLesBtn = document.querySelectorAll(".bouton-filtres");
         tousLesBtn.forEach(function(bouton){
         bouton.classList.remove("actif");        
@@ -79,37 +80,28 @@ function genererBoutons (listeBtnFiltres, listeTravaux){
        
         btnCategorie.classList.add("actif");
 
-        /* on filtre les travaux, projets, qui appartienne à cette catégorie */
-        const projetsFiltres = listeTravaux.filter(function(projets){ /* "filter" crée un nouveau tableau qui ne contient que les éléments qui respectent 
-une condition en se basant sur liste complète de tous les projets "listeTravaux". A chaque tour, "projets" représente un des projets. */
-            return projets.categoryId === categorie.id; /* la catégorie du projet (1, 2 ou 3) soit avoir strictement la même valeur que l’id de la catégorie 
-du bouton sur lequel on a cliqué. Si les deux sont égaux: le travail appartient à cette catégorie donc on le garde. */
+        const projetsFiltres = listeTravaux.filter(function(projets){ 
+            return projets.categoryId === categorie.id; 
         });
 
-        afficherElementsDansPage (projetsFiltres); /* On réutilise ta fonction d'affichage mais en lui donnant uniquement les projets filtrés */
+        afficherElementsDansPage (projetsFiltres); 
         });
 
-        filtres.appendChild(btnCategorie); /* on ajoute tous les boutons "btnCategorie" dans la div "filtres" dans le html */
+        filtres.appendChild(btnCategorie); 
      });
 }
 
-/* chargement de la page */
-async function chargementPage() { /* on crée une fct "chargementPage", asynchrone, qui sert de point de départ */
-    const contenuServeur = await obtenirDonneesServeur(); /* la fct "obtenirDonneesServeur" parle avec le serveur ce qui prend du temps donc on attends qu'elle termine son travail avant de passer à la suite.
-    Une fois que le Serveur a répondu, et que "obtenirDonneesServeur" a terminé, le résultats (le tableau des visuels) est stocké dans la variable "contenuServeur" pour ensuite le transmettre*/
-    const categoriesServeur = await filtresServeur(); /* on récupere les catégorie */
-    genererBoutons(categoriesServeur, contenuServeur); /* On génère les boutons filtres */
-    afficherElementsDansPage(contenuServeur); /* fct qui affiche sur la page le tableau des données qui sont stockées dans la variable "contenuServeur" récupéré ci-dessus*/
+async function chargementPage() { 
+    const contenuServeur = await obtenirDonneesServeur(); 
+    const categoriesServeur = await filtresServeur(); 
+    genererBoutons(categoriesServeur, contenuServeur); 
+    afficherElementsDansPage(contenuServeur); 
 }
 
-chargementPage(); /* on lance, éxécute, le chargement */
-
-/* JS va chercher les données fct obtenirDonneesServeur avec fetch, attend la reponse du Serveur avec await, convertis la reponse en format .json, crée du HTML à partir des données et l'insère dans la page*/
+chargementPage(); 
 
 
-/* ETAPE 5.2: Partie connexion/login  */
 const formulaireLogin = document.getElementById("login-form"); 
-
 
 if (formulaireLogin) {
 
@@ -119,7 +111,7 @@ if (formulaireLogin) {
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value.trim();
 
-        const identifiants = {
+        const identifiants = { 
             email: email,
             password : password
         };
@@ -137,7 +129,7 @@ if (formulaireLogin) {
                 const donnees = await reponse.json(); 
                 const token = donnees.token; 
 
-                localStorage.setItem("token", token); 
+                sessionStorage.setItem("token", token); 
                 document.location = "index.html"; 
             } else {
                 afficherMessageErreur("Erreur dans l'identification ou le mot de passe");
@@ -149,6 +141,7 @@ if (formulaireLogin) {
         }
     });
 }
+
 function afficherMessageErreur(texte) { 
     const zoneMessage = document.getElementById("message-erreur"); 
     if (zoneMessage) {

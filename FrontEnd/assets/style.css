@@ -168,18 +168,13 @@ li:hover {
 }
 
 .barre-blanche{
- 	width: 100%; /* la largeur du bloc doit prendre 100% de la largeur de son conteneur et comme c'est en postion: fixed, son conteneur de reference est la 
-	fenetre du navigateur (viewport) donc la barre blanche fait toute la largeur de l'ecran */
+ 	width: 100%; 
     height: 60px;
     background-color: white;
     align-items: center;
-	position: fixed; /* l'élément est "sorti" de la page, il est postionné par rapport à la fenetre du navigateur et non du html et les propriété bottom, 
-	left, etc servent à dire où il va se positionner dans la page */
-	bottom: 0; /* avec la position fixed cela veut dire colle toi au bas de la page de la fenêtre (0px du bord inférieur) */
+	position: fixed; 
+	bottom: 0; 
 	left: 0;
-	/* * la position fixed sort l'element de la page visible jusqu'à ce qu'on lui indique par des propriétés où il doit se placer dans la page (fenetre) et 
-	doit etre obligatoirement associé avec un left et right à 0px pour qu'il prenne la totalité de la largeur de la page independamment du html. Sinon, il 
-	reste en mode auto par defaut et garde sa position de départ. Dans notre cas left 0, permet au texte d'etre visible, contenu, dans la page. */
 }
 
 .login-footer ul li{
