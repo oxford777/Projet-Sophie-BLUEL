@@ -22,6 +22,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	text-decoration: none;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -89,11 +90,21 @@ nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
+
 nav li {
 	padding: 0 10px;
-	font-size: 1.2em;
+	font-size: 1.2em;	
+}
+
+nav ul li img{
+	width: 18px;
+	height: 18px;
+	filter: drop-shadow(0 0 0.5px black); /* logo instag en gras */
+}
+
+nav li .active{
+	font-weight: 700;
 }
 
 li:hover {
@@ -104,9 +115,13 @@ li:hover {
 	margin: 20px;
 }
 
+.login-header nav ul{
+	gap: 20px;
+}
+
 .login-container{
-	width: 380px;
-	margin: 50px auto 0;
+	width: 350px;
+	margin: 100px auto 0;
 	text-align: center;
 }
 
@@ -114,6 +129,69 @@ li:hover {
 	display: flex;
 	flex-direction: column;
 	text-align: left;
+}
+
+.login-container h2{
+	margin-bottom: 30px;
+}
+
+#login-form label{
+	margin-bottom: 0;
+	margin-bottom: 5px;
+	color: #3D3D3D;
+}
+
+#login-form input{
+	height: 40px;
+	border: none;
+	background-color: white;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+	margin-bottom: 25px;
+}
+
+#login-form input[type="submit"] {
+    background-color: #1D6154;
+	height: 36px;
+    cursor: pointer;
+	margin-top: 15px;
+}
+
+#login-form a{
+	text-align: center;
+	color: black;
+	text-decoration: underline;
+	color: #3D3D3D;
+}
+
+.login-footer{
+	max-width: 100% ;	
+}
+
+.barre-blanche{
+ 	width: 100%; /* la largeur du bloc doit prendre 100% de la largeur de son conteneur et comme c'est en postion: fixed, son conteneur de reference est la 
+	fenetre du navigateur (viewport) donc la barre blanche fait toute la largeur de l'ecran */
+    height: 60px;
+    background-color: white;
+    align-items: center;
+	position: fixed; /* l'élément est "sorti" de la page, il est postionné par rapport à la fenetre du navigateur et non du html et les propriété bottom, 
+	left, etc servent à dire où il va se positionner dans la page */
+	bottom: 0; /* avec la position fixed cela veut dire colle toi au bas de la page de la fenêtre (0px du bord inférieur) */
+	left: 0;
+	/* * la position fixed sort l'element de la page visible jusqu'à ce qu'on lui indique par des propriétés où il doit se placer dans la page (fenetre) et 
+	doit etre obligatoirement associé avec un left et right à 0px pour qu'il prenne la totalité de la largeur de la page independamment du html. Sinon, il 
+	reste en mode auto par defaut et garde sa position de départ. Dans notre cas left 0, permet au texte d'etre visible, contenu, dans la page. */
+}
+
+.login-footer ul li{
+	padding-right: 70px;
+	color: #3D3D3D;
+	cursor: pointer;
+}
+
+.message-erreur{
+	color: red;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 #introduction {
