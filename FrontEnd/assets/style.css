@@ -51,17 +51,42 @@ table {
 body {
 	max-width: 1140px;
 	margin:auto;
-	font-family: 'Work Sans' ;
+	font-family: 'Work Sans';
 	font-size: 14px;
 	background-color: #FFFEF8;
 }
+
+#mode-edition{
+	width: 100%;
+	display: none;
+	background-color: black;
+	color: white;
+	font-size: 16px;
+	height: 60px;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	right: 0;
+	left: 0;
+	top: 0;
+}
+
+#mode-edition i{
+	color: white;
+	margin-right: 8px;
+}
+
+.mode-edition {
+	margin-top: 100px;
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	margin: 40px 0 150px 0;
 }
 section {
-	margin: 50px 0
+	margin: 150px 0
 }
 
 h1{
@@ -77,7 +102,7 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
+
 }
 
 h2{
@@ -90,11 +115,13 @@ nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
+	
 }
 
-nav li {
+nav li a{
 	padding: 0 10px;
 	font-size: 1.2em;	
+	color: #3D3D3D;
 }
 
 nav ul li img{
@@ -103,16 +130,46 @@ nav ul li img{
 	filter: drop-shadow(0 0 0.5px black); /* logo instag en gras */
 }
 
-nav li .active{
-	font-weight: 700;
+.portfolio-header{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	margin-bottom: 50px;
 }
 
-li:hover {
-	color: #B1663C;
+.portfolio-header i{
+	margin-right: 10px;
+	font-size: 14px;
 }
 
-.login-header{
-	margin: 20px;
+.btn-modifier{
+	display: none;
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	font-size: 16px;
+	display: flex;
+	align-items: center;
+	padding: 0;
+	font-family: 'Work Sans';
+
+}
+
+.active{
+	font-weight: 900;	
+}
+
+.active, 
+header nav ul li a:hover{
+color: black;
+font-weight: 900;
+}
+
+
+.logo-lien{
+	display: inline-block;
+	color: inherit;
 }
 
 .login-header nav ul{
@@ -164,7 +221,7 @@ li:hover {
 }
 
 .login-footer{
-	max-width: 100% ;	
+	max-width: 100% ;
 }
 
 .barre-blanche{
@@ -177,7 +234,7 @@ li:hover {
 	left: 0;
 }
 
-.login-footer ul li{
+.login-footer ul li a{
 	padding-right: 70px;
 	color: #3D3D3D;
 	cursor: pointer;
@@ -214,14 +271,15 @@ li:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
 }
 
 #filtres{
 	display: flex;
 	justify-content: center;
+	font-size: 16px;
 	gap: 10px;
-	margin-bottom: 30px;
+	margin-top: 20px;
+	margin-bottom: 40px;
 }
 
 .bouton-filtres{
@@ -235,8 +293,7 @@ li:hover {
 	cursor: pointer;
 }
 
-.bouton-filtres.actif,
-.bouton-filtres:hover{
+.bouton-filtres.actif {
 	background-color: #1D6154;
 	color: white;
 }
@@ -300,5 +357,204 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
+	
 }
+
+footer li a{
+	cursor: pointer;
+	color: #3D3D3D;
+}
+
+
+/* ETAPE 6 MODALE */
+
+
+.modale{ /*Le conteneur global de la modale (modale caché par défaut) */
+	display: none; /* cachée tant qu'on ne l'ouvre pas en JS */
+	position: fixed;
+	inset: 0; /* top:0; right:0; bottom:0; left:0 */
+	z-index: 2000; /* au-dessus de #mode-edition */
+	justify-content: center;
+	align-items: center;
+}
+
+
+.modale-overlay{ /* Overlay gris transparent */
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.30);
+	z-index: 1;
+}
+
+
+.modale-content{ /* Le "bloc blanc" */
+	position: relative;
+	width: 630px;
+	background: #fff;
+	border-radius: 10px;
+	padding: 50px 80px 40px ;
+	box-sizing: border-box;
+	z-index: 2;
+}
+
+
+.modale-close{ /* Bouton fermer (croix) */
+position: absolute;
+top: 20px;
+right: 20px;
+border: none;
+background: transparent;
+cursor: pointer;
+font-size: 18px;
+padding: 5px;
+color: #000;
+}
+
+.modale-retour{ /* Flèche retour */
+position: absolute;
+top: 20px;
+left: 20px;
+cursor: pointer;
+font-size: 18px;
+color: #000;
+}
+
+
+
+.modale-content h3{
+	text-align: center;
+	font-family: 'Work Sans';
+	font-size: 26px;
+	font-weight: 400;
+	margin-bottom: 35px;
+	color: #000;
+}
+
+.ligne-separation {
+	width: 100%;
+	height: 1px;
+	background: #b3b3b3;
+	margin: 50px 0 20px;
+}
+
+
+.modale-galerie-images{ /* Grille d’images dans la modale */
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 10px;
+margin-bottom: 35px;
+}
+
+.modale-galerie-images figure{ /* Chaque vignette */
+position: relative;
+margin: 0;
+}
+
+.modale-galerie-images img {
+display: block;
+width: 100%;
+}
+
+.modale-galerie-images .btn-delete{ /* Icône poubelle (je la mettrai dans le HTML généré en JS plus tard) */
+position: absolute;
+top: 5px;
+right: 5px;
+width: 17px;
+height: 17px;
+border: none;
+border-radius: 2px;
+background: #000;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+}
+
+
+.modale-galerie-images .btn-delete i {
+	font-size: 10px;
+	color: #fff;
+}
+
+
+
+.btn-ajouter-photo, 
+.btn-valider {
+	display: block;
+	margin: 0 auto;
+	width: 240px;
+	height: 36px;
+	border-radius: 60px;
+	border: none;
+	cursor: pointer;
+	font-family: 'Syne';
+	font-weight: 700;
+}
+
+.btn-ajouter-photo{ /* Bouton vert */
+background: #1D6154;
+color: #fff;
+}
+
+.btn-valider{ /* Valider (gris tant que pas prêt) */
+background: #a7a7a7;
+color: #fff;
+}
+
+
+
+.modale-form{ /* Par défaut, on cache le formulaire (je l’afficherai en JS quand on clique sur "Ajouter une photo") */
+display: none;
+}
+
+#form-ajout-photo{ /* Champs */
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+#form-ajout-photo .ligne-separation{
+	margin-top: 30px;
+	margin-bottom: 25px;
+}
+
+#form-ajout-photo label {
+	font-family: 'Work Sans';
+	font-size: 14px;
+	color: #3d3d3d;
+}
+
+#form-ajout-photo input[type="text"],
+#form-ajout-photo select {
+	
+	border: none;
+	height: 50px;
+	box-shadow: 0 4px 14px rgba(0,0,0,0.09);
+	padding: 0 10px;
+	box-sizing: border-box;
+	
+}
+
+
+.form-image{
+	height: 170px;
+	background: #E8F1F6;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 10px;
+	border-radius: 3px;
+}
+
+.form-image input[type="file"]{ /* input file */
+	font-family: 'Work Sans';
+}
+
+
+
+
+
+
+
+
 

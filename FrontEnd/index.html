@@ -8,17 +8,22 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
+	<link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="./script.js" defer></script>
 </head>
 <body>
+	<div id="mode-edition">
+		<i class="fa-regular fa-pen-to-square"></i>
+		<p>Mode édition</p>
+	</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
 			<li><a href="index.html">projets</a></li>
 			<li><a href="#contact">contact</a></li>
-			<li><a href="login.html">login</a></li>
+			<li><a href="login.html" id="login-link">login</a></li>
 			<li><a href="https://www.instagram.com/" target="_blank"><img src="./assets/icons/instagram.png" alt="Instagram"></a></li>
 		</ul>
 	</nav>
@@ -35,8 +40,12 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
-	<section id="portfolio">
+	<section id="portfolio"> 
+		<div class="portfolio-header"> <!-- étape 5.3-->
 		<h2>Mes Projets</h2>
+		<button class="btn-modifier" id="btn-modifier-projets">
+		<i class="fa-regular fa-pen-to-square"></i>modifier</button>
+		</div> <!-- fin étape 5.3-->
 		<div id="filtres"></div>
 		<div class="gallery"></div>
 	</section>
@@ -58,10 +67,69 @@
 <footer>
 	<nav>
 		<ul>
-			<li>Mentions Légales</li>
+			<li><a href="#">Mentions Légales</a></li>
 		</ul>
 	</nav>
 </footer>
+
+
+ <div class="modale" id="modale">
+	<div class="modale-overlay"></div>
+
+
+	<div class="modale-content">
+
+
+	
+		<button class="modale-close" aria-label="Fermer la modale">
+			<i class="fa-solid fa-xmark"></i>
+		</button>
+
+
+
+	
+		<div class="modale-galerie" id="modale-galerie">
+			<h3>Galerie photo</h3>
+
+
+			<div class="modale-galerie-images"></div> 
+
+			<div class="ligne-separation"></div>
+
+			<button class="btn-ajouter-photo" id="btn-ajouter-photo">Ajouter une photo</button>
+		</div>
+
+
+	
+		<div class="modale-form" id="modale-form">
+
+		
+		 <div class="modale-retour" aria-label="Retour">
+			<i class="fa-solid fa-arrow-left"></i>
+		</div>
+			<h3>Ajout photo</h3>
+
+			<form id="form-ajout-photo">
+				<div class="form-image">
+					<input type="file" id="image" name="image" accept="image/*">
+				</div>
+
+				<label for="title">Titre</label>
+				<input type="text" id="title" name="title">	
+				
+				<label for="categorie">Catégorie</label>
+				<select name="categorie" id="categorie">
+				
+				</select> 
+
+				<div class="ligne-separation"></div>
+
+				<button type="submit" class="btn-valider">valider</button>
+			</form>
+		</div>
+	</div>
+ </div>
+
 </body>
 </html>
 

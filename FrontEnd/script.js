@@ -1,8 +1,7 @@
-
 const galerie = document.querySelector(".gallery");
 const filtres = document.getElementById("filtres");
 
-
+/* PAGE D'ACCUEIL */
 async function obtenirDonneesServeur (){ 
     try{
         const reponseServeur = await fetch ("http://localhost:5678/api/works"); 
@@ -53,7 +52,7 @@ function genererBoutons (listeBtnFiltres, listeTravaux){
 
     const btnTous = document.createElement("button"); 
     btnTous.textContent = "Tous"; 
-    btnTous.classList.add ("bouton-filtres"); 
+    btnTous.classList.add ("bouton-filtres", "actif"); 
 
     btnTous.addEventListener("click", function(){ 
     const tousLesBtn = document.querySelectorAll(".bouton-filtres"); 
@@ -98,7 +97,7 @@ async function chargementPage() {
     afficherElementsDansPage(contenuServeur); 
 }
 
-chargementPage(); 
+/*chargementPage(); puisque maintenant, tu appelles chargementPage() dans demarrer() seulement si galerie et filtres existent (donc pas sur login.html).*/
 
 
 const formulaireLogin = document.getElementById("login-form"); 
@@ -151,6 +150,159 @@ function afficherMessageErreur(texte) {
         }
     }
 
+/* ETAPE 5.3 */
+/* GESTION DU MODE EDITION/LOGIN */
+function appliquerEtatConnexion(){
+    const token = sessionStorage.getItem("token");
+    const bandeauModeEdition = document.getElementById("mode-edition");
+    const loginLink = document.getElementById("login-link");
+    const boutonsModifier = document.querySelectorAll(".btn-modifier");
 
+
+if (token) { /* utilisateur connecté */
+
+    document.body.classList.add("mode-edition"); /* on active la class sur le body soit le margin top de 100px */
+
+    if(bandeauModeEdition) { /* afficher le bandeau noir */
+        bandeauModeEdition.style.display = "flex";
+    }
+
+    if(filtres) { /* cacher les filtres */
+        filtres.style.display = "none";
+}
+
+    if(loginLink) { /* remplacer login par logout */
+        loginLink.textContent = "logout";
+        loginLink.href = "#";
+
+        loginLink.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            sessionStorage.removeItem("token"); /* supression du token = deconnexion */
+            document.location = "index.html"; /* retour à la page d'accueil */
+        });
+    }
+
+    boutonsModifier.forEach((btn) => { /* afficher les boutons "modifier" */
+        btn.style.display = "flex";
+        });
+
+    } else { /* utilisateur non connecté */
+
+        document.body.classList.remove("mode-edition"); /* on enlève la class du body */
+
+        if(bandeauModeEdition) { /* bandeau caché */
+            bandeauModeEdition.style.display = "none";
+        }
+
+        if(filtres) { /* filtres visibles (on laisse le style par defaut) */
+            filtres.style.display = "";
+        }
+
+        if(loginLink){ /* lien login normal */
+            loginLink.textContent = "login";
+            loginLink.href = "login.html";
+        }
+
+        boutonsModifier.forEach((btn) => {
+            btn.style.display = "none";
+        });
+    }
+}
+
+
+/* ETAPE 6 */
+
+const modale = document.getElementById("modale");
+const overlay = document.querySelector(".modale-overlay");
+const btnClose = document.querySelector(".modale-close");
+const btnModifier = document.getElementById("btn-modifier-projets");
+
+const zoneGalerie = document.getElementById("modale-galerie");
+const zoneFormulaire = document.getElementById("modale-form");
+
+const btnAjouterPhoto = document.getElementById("btn-ajouter-photo");
+const btnRetour = document.querySelector(".modale-retour");
+
+const galerieModale = document.querySelector(".modale-galerie-images");
+
+
+function ouvrirModale(){
+    modale.style.display = "flex";
+    afficherGalerie(); 
+}
+
+function fermerModale(){
+    modale.style.display = "none";
+}
+
+
+function afficherGalerie(){
+    zoneGalerie.style.display = "block";
+    zoneFormulaire.style.display = "none";
+}
+
+function afficherFormulaire(){
+    zoneGalerie.style.display = "none";
+    zoneFormulaire.style.display = "block";
+}
+
+
+async function afficherGalerieDansModale() {
+    const works = await obtenirDonneesServeur();
+    galerieModale.innerHTML = "";
+
+    works.forEach((work) => {
+        const figure = document.createElement("figure");
+
+        const img = document.createElement("img");
+        img.src = work.imageUrl;
+        img.alt = work.title;
+
+        const btnDelete = document.createElement("button");
+        btnDelete.classList.add("btn-delete");
+        btnDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+        btnDelete.dataset.id = work.id;
+
+        figure.appendChild(img);
+        figure.appendChild(btnDelete);
+        galerieModale.appendChild(figure);
+
+    });
+}
+
+if (btnModifier){
+    btnModifier.addEventListener("click", (e) => {
+        e.preventDefault();
+        ouvrirModale();
+        afficherGalerieDansModale();
+    });
+}
+
+if (btnClose) btnClose.addEventListener("click", fermerModale);
+if (overlay) overlay.addEventListener("click", fermerModale);
+
+if (btnAjouterPhoto) {
+    btnAjouterPhoto.addEventListener("click", () => {
+    afficherFormulaire();
+    });
+}
+
+if (btnRetour) {
+    btnRetour.addEventListener("click", () => {
+    afficherGalerie();
+    });
+}
+
+/* fin d l'etape 6 */
+
+
+    function demarrer(){
+        if(galerie && filtres){ /* on charge les travaux uniquement sur la page d'acceuil */
+            chargementPage();
+        }
+        appliquerEtatConnexion();
+    }
+    demarrer();
 
 
