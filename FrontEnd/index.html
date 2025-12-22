@@ -10,6 +10,7 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
 	<link rel="stylesheet" href="./assets/style.css">
+	<script src="https://kit.fontawesome.com/e2e90a2bc8.js" crossorigin="anonymous"></script>
 	<script src="./script.js" defer></script>
 </head>
 <body>
@@ -73,6 +74,7 @@
 </footer>
 
 
+<!-- ETAPE 6-->
  <div class="modale" id="modale">
 	<div class="modale-overlay"></div>
 
@@ -80,37 +82,41 @@
 	<div class="modale-content">
 
 
-	
+		<!-- bouton fermé-->
 		<button class="modale-close" aria-label="Fermer la modale">
 			<i class="fa-solid fa-xmark"></i>
 		</button>
 
 
-
-	
+		<!-- zone 1 : galerie-->
 		<div class="modale-galerie" id="modale-galerie">
 			<h3>Galerie photo</h3>
 
+			<div class="modale-galerie-images"></div> <!-- etpae 6: les images seront ajoutés dans le js à l'etape suivante (7)-->
 
-			<div class="modale-galerie-images"></div> 
-
+			<div class="actions">
 			<div class="ligne-separation"></div>
-
 			<button class="btn-ajouter-photo" id="btn-ajouter-photo">Ajouter une photo</button>
+			</div>
 		</div>
 
 
-	
+		<!-- zone 2 : formulaire-->
 		<div class="modale-form" id="modale-form">
-
-		
+			<!-- bouton de retour-->
 		 <div class="modale-retour" aria-label="Retour">
 			<i class="fa-solid fa-arrow-left"></i>
 		</div>
 			<h3>Ajout photo</h3>
 
 			<form id="form-ajout-photo">
+				<p id="message-erreur-ajout" class="message-erreur"></p> <!-- ETAPE 8.1 -->
 				<div class="form-image">
+					<div class="upload-ui">
+						<i class="fa-regular fa-image"></i>
+						<button type="button" class="btn-upload">+ Ajouter photo</button>
+						<p class="upload-hint">jpeg, png : 4 mo max</p>
+					</div>
 					<input type="file" id="image" name="image" accept="image/*">
 				</div>
 
@@ -118,13 +124,13 @@
 				<input type="text" id="title" name="title">	
 				
 				<label for="categorie">Catégorie</label>
-				<select name="categorie" id="categorie">
-				
-				</select> 
+				<select name="categorie" id="categorie"></select> 
 
+				<div class="modale-actions">
 				<div class="ligne-separation"></div>
-
 				<button type="submit" class="btn-valider">valider</button>
+				</div>
+				
 			</form>
 		</div>
 	</div>

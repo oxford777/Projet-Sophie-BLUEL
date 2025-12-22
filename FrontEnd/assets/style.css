@@ -127,7 +127,7 @@ nav li a{
 nav ul li img{
 	width: 18px;
 	height: 18px;
-	filter: drop-shadow(0 0 0.5px black); /* logo instag en gras */
+	filter: drop-shadow(0 0 0.5px black); 
 }
 
 .portfolio-header{
@@ -368,193 +368,241 @@ footer li a{
 
 /* ETAPE 6 MODALE */
 
+.modale{
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
 
-.modale{ /*Le conteneur global de la modale (modale caché par défaut) */
-	display: none; /* cachée tant qu'on ne l'ouvre pas en JS */
-	position: fixed;
-	inset: 0; /* top:0; right:0; bottom:0; left:0 */
-	z-index: 2000; /* au-dessus de #mode-edition */
-	justify-content: center;
-	align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
-
-.modale-overlay{ /* Overlay gris transparent */
-	position: absolute;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.30);
-	z-index: 1;
+.modale-overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.30);
+  z-index: 1;
 }
 
-
-.modale-content{ /* Le "bloc blanc" */
-	position: relative;
-	width: 630px;
-	background: #fff;
-	border-radius: 10px;
-	padding: 50px 80px 40px ;
-	box-sizing: border-box;
-	z-index: 2;
+.modale-content{
+  position: relative;
+  max-width: calc(100% - 40px);
+  background: #fff;
+  border-radius: 10px;
+  padding: 50px 80px 40px;
+  box-sizing: border-box;
+  z-index: 2;
+  top: 50px;
 }
 
+.modale-galerie,
+.modale-form{
+  display: flex;
+  flex-direction: column;
 
-.modale-close{ /* Bouton fermer (croix) */
-position: absolute;
-top: 20px;
-right: 20px;
-border: none;
-background: transparent;
-cursor: pointer;
-font-size: 18px;
-padding: 5px;
-color: #000;
+  min-height: 500px; /
 }
 
-.modale-retour{ /* Flèche retour */
-position: absolute;
-top: 20px;
-left: 20px;
-cursor: pointer;
-font-size: 18px;
-color: #000;
+.modale-form{ display:none; }
+
+.actions{
+  margin-top: auto;     
+  padding-top: 0;
 }
 
+.ligne-separation{
+  width: 100%;
+  height: 1px;
+  background: #b3b3b3;
 
+  margin: 40px 0 20px;
+}
 
 .modale-content h3{
-	text-align: center;
-	font-family: 'Work Sans';
-	font-size: 26px;
-	font-weight: 400;
-	margin-bottom: 35px;
-	color: #000;
+  text-align: center;
+  font-family: 'Work Sans';
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 35px;
+  color: #000;
 }
 
-.ligne-separation {
-	width: 100%;
-	height: 1px;
-	background: #b3b3b3;
-	margin: 50px 0 20px;
+.modale-galerie-images{
+  display: grid;
+  grid-template-columns: repeat(5, 76px); 
+  gap: 10px;
+  row-gap: 25px;
 }
 
-
-.modale-galerie-images{ /* Grille d’images dans la modale */
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 10px;
-margin-bottom: 35px;
+.modale-galerie-images figure{
+  width: 76px;
+  height: 102px; 
+  position: relative;
+  margin: 0;
 }
 
-.modale-galerie-images figure{ /* Chaque vignette */
-position: relative;
-margin: 0;
+.modale-galerie-images img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.modale-galerie-images img {
-display: block;
-width: 100%;
+.modale-galerie-images .btn-delete{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 17px;
+  height: 17px;
+  border: none;
+  border-radius: 2px;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
-.modale-galerie-images .btn-delete{ /* Icône poubelle (je la mettrai dans le HTML généré en JS plus tard) */
-position: absolute;
-top: 5px;
-right: 5px;
-width: 17px;
-height: 17px;
-border: none;
-border-radius: 2px;
-background: #000;
-display: flex;
-justify-content: center;
-align-items: center;
-cursor: pointer;
+.modale-galerie-images .btn-delete i{
+  font-size: 10px;
+  color: #fff;
 }
 
-
-.modale-galerie-images .btn-delete i {
-	font-size: 10px;
-	color: #fff;
+.btn-ajouter-photo,
+.btn-valider{
+  display: block;
+  margin: 0 auto;
+  width: 240px;
+  height: 36px;
+  border-radius: 60px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Syne';
+  font-weight: 700;
 }
 
+.btn-ajouter-photo{ background:#1D6154; color:#fff; }
+.btn-valider{ background:#a7a7a7; color:#fff; }
 
-
-.btn-ajouter-photo, 
-.btn-valider {
-	display: block;
-	margin: 0 auto;
-	width: 240px;
-	height: 36px;
-	border-radius: 60px;
-	border: none;
-	cursor: pointer;
-	font-family: 'Syne';
-	font-weight: 700;
+#form-ajout-photo{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1; 
 }
 
-.btn-ajouter-photo{ /* Bouton vert */
-background: #1D6154;
-color: #fff;
-}
-
-.btn-valider{ /* Valider (gris tant que pas prêt) */
-background: #a7a7a7;
-color: #fff;
-}
-
-
-
-.modale-form{ /* Par défaut, on cache le formulaire (je l’afficherai en JS quand on clique sur "Ajouter une photo") */
-display: none;
-}
-
-#form-ajout-photo{ /* Champs */
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-#form-ajout-photo .ligne-separation{
-	margin-top: 30px;
-	margin-bottom: 25px;
-}
-
-#form-ajout-photo label {
-	font-family: 'Work Sans';
-	font-size: 14px;
-	color: #3d3d3d;
+#form-ajout-photo label{
+  font-family: 'Work Sans';
+  font-size: 14px;
+  color: #3d3d3d;
 }
 
 #form-ajout-photo input[type="text"],
-#form-ajout-photo select {
-	
-	border: none;
-	height: 50px;
-	box-shadow: 0 4px 14px rgba(0,0,0,0.09);
-	padding: 0 10px;
-	box-sizing: border-box;
-	
+#form-ajout-photo select{
+  border: none;
+  height: 50px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.09);
+  padding: 0 10px;
+  box-sizing: border-box;
+  background: #fff;          
+  appearance: none;          
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
+#form-ajout-photo select{
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
 
 .form-image{
-	height: 170px;
-	background: #E8F1F6;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 10px;
-	border-radius: 3px;
+  width: 420px;        
+  height: 169px;       
+  background: #E8F1F6; 
+  border-radius: 3px;
+  margin: 0 auto 10px; 
+  position: relative;
+  overflow: hidden;
 }
 
-.form-image input[type="file"]{ /* input file */
-	font-family: 'Work Sans';
+.form-image input[type="file"]{
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
 }
 
+.upload-ui{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload-ui i{
+  font-size: 76px;   
+  line-height: 76px;
+  color: #B9C5CC;
+}
+
+.btn-upload{
+  width: 173px;      
+  height: 36px;      
+  border-radius: 50px;
+  border: none;
+  background: #CBD6DC;
+  color: #306685;
+  font-family: 'Work Sans';
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.upload-hint{
+  width: 120px;       
+  height: 12px;      
+  font-size: 10px;
+  line-height: 12px;
+  color: #444444;
+  margin: 0;
+  text-align: center;
+}
+
+.modale-close{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px;
+  color: #000;
+}
+
+.modale-retour{
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #000;
+}
+/* fin de l'etape 6 */
 
 
+/* ETAPE 8.1 */
+.form-image img.preview{
+max-width: 100%;
+max-height: 170px;
+object-fit: cover;
+display: block;
+margin: 0 auto;
+}
 
-
-
-
-
-
+.form-image.has-preview .upload-ui{ 
+	display: none;
+}

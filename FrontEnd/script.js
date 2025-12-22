@@ -21,9 +21,12 @@ function afficherElementsDansPage (afficherDonnees){
 
     afficherDonnees.forEach(visuels => { 
         const figure = document.createElement("figure"); 
+        figure.dataset.id = visuels.id; /* etape 7 */
+
         const image = document.createElement("img"); 
             image.src = visuels.imageUrl; 
             image.alt = visuels.title;
+
         const figcaption = document.createElement("figcaption"); 
             figcaption.textContent = visuels.title;
 
@@ -97,7 +100,7 @@ async function chargementPage() {
     afficherElementsDansPage(contenuServeur); 
 }
 
-/*chargementPage(); puisque maintenant, tu appelles chargementPage() dans demarrer() seulement si galerie et filtres existent (donc pas sur login.html).*/
+/*chargementPage(); puisque maintenant, j'appelle chargementPage() dans demarrer() seulement si galerie et filtres existent (donc pas sur login.html).*/
 
 
 const formulaireLogin = document.getElementById("login-form"); 
@@ -163,15 +166,15 @@ if (token) { /* utilisateur connecté */
 
     document.body.classList.add("mode-edition"); /* on active la class sur le body soit le margin top de 100px */
 
-    if(bandeauModeEdition) { /* afficher le bandeau noir */
+    if(bandeauModeEdition) { /* affiche le bandeau noir */
         bandeauModeEdition.style.display = "flex";
     }
 
-    if(filtres) { /* cacher les filtres */
+    if(filtres) { /* cache les filtres */
         filtres.style.display = "none";
 }
 
-    if(loginLink) { /* remplacer login par logout */
+    if(loginLink) { /* remplace login par logout */
         loginLink.textContent = "logout";
         loginLink.href = "#";
 
@@ -271,6 +274,23 @@ async function afficherGalerieDansModale() {
     });
 }
 
+/* ETAPE 7 : suppression des travaux existants*/
+async function supprimerTravail(id) {
+    const token = sessionStorage.getItem('token');
+    if(!token) return;
+
+    const reponse = await fetch(`http://localhost:5678/api/works/${id}`,{
+        method : "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    if(!reponse.ok){
+        throw new Error("Erreur lors de la suppression");
+    }
+}
+/* FIN DE L'ETAPE 7 */
+
 if (btnModifier){
     btnModifier.addEventListener("click", (e) => {
         e.preventDefault();
@@ -293,8 +313,232 @@ if (btnRetour) {
     afficherGalerie();
     });
 }
-
 /* fin d l'etape 6 */
+
+
+/* ETAPE 7 suite */
+if(galerieModale){
+    galerieModale.addEventListener("click", async(e) => {
+        const btn = e.target.closest(".btn-delete");
+        if(!btn) return;
+
+        const identifiantProjet = btn.dataset.id;
+
+        try{
+            await supprimerTravail(identifiantProjet);
+
+           /* retire dans la modale */ 
+           btn.closest("figure")?.remove();
+
+           /* retire dans la galerie principale */
+           document.querySelector(`.gallery figure[data-id="${identifiantProjet}"]`)?.remove();
+
+        }catch(error){
+            console.error(error);
+            alert("Impossible de supprimer le projet");
+        }
+    });
+}
+/* fin de l'etape 7 */
+
+/*  ETAPE 8.1 */
+
+/* 1) On récupère les éléments du formulaire */
+const formAjout = document.getElementById("form-ajout-photo");
+const inputFile = document.getElementById("image");
+const selectCat = document.getElementById("categorie");
+const btnUpload = document.querySelector(".btn-upload");
+
+
+const msgErreur = document.getElementById("message-erreur-ajout");
+
+function afficherErreurAjout(message) {
+    if (msgErreur) msgErreur.textContent = message;
+    else alert(message);
+}
+
+function effacerErreurAjout() {
+    if(msgErreur) msgErreur.textContent = "";
+}
+
+function resetPreviewAjoutPhoto() {
+    const zoneImage = document.querySelector(".form-image");
+    if (!zoneImage) return;
+
+zoneImage.classList.remove("has-preview");
+
+const preview = zoneImage.querySelector("img.preview");
+if (preview) preview.remove();
+
+if (inputFile) inputFile.value = "";
+}
+
+async function chargerCategoriesDansSelect() {
+    if(!selectCat) return;
+
+
+const categories = await filtresServeur();
+
+selectCat.innerHTML = "";
+
+const optionVide = document.createElement("option");
+    optionVide.value = "";
+    optionVide.textContent = "";
+    selectCat.appendChild(optionVide);
+
+categories.forEach((cat) => {
+    const option = document.createElement("option");
+    option.value = cat.id;
+    option.textContent = cat.name;
+    selectCat.appendChild(option);
+});
+}
+
+function afficherPreviewImage(file) {
+    if(!file) return;
+
+    const zoneImage = document.querySelector(".form-image");
+    if(!zoneImage) return;
+
+    zoneImage.classList.add("has-preview");
+
+    const anciennePreview = zoneImage.querySelector("img.preview");
+    if (anciennePreview) anciennePreview.remove();
+
+    const img = document.createElement("img");
+    img.classList.add("preview");
+    img.src = URL.createObjectURL(file);
+    img.alt = "Aperçu";
+
+    zoneImage.insertBefore(img, inputFile);
+
+}
+
+if (btnUpload && inputFile) {
+    btnUpload.addEventListener("click", () =>{
+        inputFile.click();
+    });
+}
+
+if (inputFile) {
+    inputFile.addEventListener("change", () =>{
+        effacerErreurAjout();
+        const file = inputFile.files[0];
+        if (file) afficherPreviewImage(file);
+    });
+}
+
+/* ETAPE 8.2 */
+
+function ajouterProjetDansGaleriePrincipale(work) {
+    if (!galerie) return;
+
+    const figure = document.createElement("figure");
+    figure.dataset.id = work.id;
+
+    const img = document.createElement("img");
+    img.src = work.imageUrl;
+    img.alt = work.title;
+
+    const cap = document.createElement("figcaption");
+    cap.textContent = work.title;
+
+    figure.appendChild(img);
+    figure.appendChild(cap);
+    galerie.appendChild(figure);
+    }   
+
+function ajouterProjetDansGalerieModale(work) {
+    if (!galerieModale) return;
+
+    const figure = document.createElement("figure");
+
+    const img = document.createElement("img");
+    img.src = work.imageUrl;
+    img.alt = work.title;
+
+    const btnDelete = document.createElement("button");
+    btnDelete.classList.add("btn-delete");
+    btnDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+    btnDelete.dataset.id = work.id;
+
+    figure.appendChild(img);
+    figure.appendChild(btnDelete);
+    galerieModale.appendChild(figure);
+    }
+/* FIN DE L'ETAPE 8.2  */
+
+
+async function envoyerFormulaireAjout(event) {
+    event.preventDefault();
+    effacerErreurAjout();
+
+    const token = sessionStorage.getItem("token");
+    if(!token) {
+        afficherErreurAjout("Vous devez être connecté pour ajouter un projet");
+        return;
+    }
+
+  const file = inputFile.files[0];
+  const title = document.getElementById("title").value.trim();
+  const category = selectCat.value;
+
+  if (!file || !title || !category) {
+    afficherErreurAjout("Veuillez renseigner une image, un titre et une catégorie");
+    return;
+  }
+
+  
+  const formData = new FormData(formAjout);
+
+  formData.delete("categorie");
+  formData.append("category", category);
+
+  try {
+    const response = await fetch("http://localhost:5678/api/works",{
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+    });
+
+    const data = await response.json().catch(() => null);
+    if(!response.ok) {
+        afficherErreurAjout(data?.message || "Erreur : envoi impossible");
+        return;
+    }
+
+    
+    console.log("Réponse API (projet créé):", data );
+
+    
+    ajouterProjetDansGaleriePrincipale(data);
+    ajouterProjetDansGalerieModale(data);
+
+    formAjout.reset();
+    resetPreviewAjoutPhoto();
+
+    fermerModale();
+    
+  } catch (error) {
+    console.error(error);
+    afficherErreurAjout("Erreur réseau : impossible d'envoyer le projet");
+  }  
+}
+
+if (formAjout) {
+    formAjout.addEventListener("submit", envoyerFormulaireAjout);
+}
+
+if (btnAjouterPhoto) {
+    btnAjouterPhoto.addEventListener("click", async() => {
+        formAjout.reset();
+        resetPreviewAjoutPhoto();
+        await chargerCategoriesDansSelect();
+    })
+}
+/* FIN DE L'ETAPE 8.1 */
 
 
     function demarrer(){
