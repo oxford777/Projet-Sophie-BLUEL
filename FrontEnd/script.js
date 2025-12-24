@@ -164,7 +164,7 @@ function appliquerEtatConnexion(){
 
 if (token) { /* utilisateur connecté */
 
-    document.body.classList.add("mode-edition"); /* on active la class sur le body soit le margin top de 100px */
+    document.body.classList.add("mode-edition"); /* j'active la class sur le body soit le margin top de 100px */
 
     if(bandeauModeEdition) { /* affiche le bandeau noir */
         bandeauModeEdition.style.display = "flex";
@@ -192,13 +192,13 @@ if (token) { /* utilisateur connecté */
 
     } else { /* utilisateur non connecté */
 
-        document.body.classList.remove("mode-edition"); /* on enlève la class du body */
+        document.body.classList.remove("mode-edition"); /* j'enlève la class du body */
 
         if(bandeauModeEdition) { /* bandeau caché */
             bandeauModeEdition.style.display = "none";
         }
 
-        if(filtres) { /* filtres visibles (on laisse le style par defaut) */
+        if(filtres) { /* filtres visibles (je laisse le style par defaut) */
             filtres.style.display = "";
         }
 
@@ -231,23 +231,23 @@ const galerieModale = document.querySelector(".modale-galerie-images");
 
 
 function ouvrirModale(){
-    modale.style.display = "flex";
-    afficherGalerie(); 
+    modale.classList.add("is-open", "show-galerie");
+    modale.classList.remove("show-form"); 
 }
 
 function fermerModale(){
-    modale.style.display = "none";
+    modale.classList.remove("is-open", "show-galerie", "show-form");
 }
 
 
 function afficherGalerie(){
-    zoneGalerie.style.display = "block";
-    zoneFormulaire.style.display = "none";
+    modale.classList.add("show-galerie");
+    modale.classList.remove("show-form");
 }
 
 function afficherFormulaire(){
-    zoneGalerie.style.display = "none";
-    zoneFormulaire.style.display = "block";
+    modale.classList.add("show-form");
+    modale.classList.remove("show-galerie");
 }
 
 
@@ -348,6 +348,8 @@ const formAjout = document.getElementById("form-ajout-photo");
 const inputFile = document.getElementById("image");
 const selectCat = document.getElementById("categorie");
 const btnUpload = document.querySelector(".btn-upload");
+const inputTitle = document.getElementById("title");
+const btnValider = document.querySelector(".btn-valider");
 
 
 const msgErreur = document.getElementById("message-erreur-ajout");
@@ -359,6 +361,22 @@ function afficherErreurAjout(message) {
 
 function effacerErreurAjout() {
     if(msgErreur) msgErreur.textContent = "";
+}
+
+function verifierFormulaire() {
+    if(!btnValider) return;
+
+    const photoOk = inputFile.files.length > 0;
+    const titreOk = inputTitle.value.trim() !== "";
+    const categorieOk = selectCat.value !== "";
+
+    if (photoOk && titreOk && categorieOk) {
+        btnValider.disabled = false;
+        btnValider.classList.add("is-active");
+    } else {
+        btnValider.disabled = true;
+        btnValider.classList.remove("is-active");
+    }
 }
 
 function resetPreviewAjoutPhoto() {
@@ -425,8 +443,24 @@ if (inputFile) {
         effacerErreurAjout();
         const file = inputFile.files[0];
         if (file) afficherPreviewImage(file);
+        verifierFormulaire();
     });
 }
+
+if (inputTitle) {
+    inputTitle.addEventListener("input", () => {
+        effacerErreurAjout();
+        verifierFormulaire();
+    });
+}
+
+if (selectCat) {
+    selectCat.addEventListener("change", () => {
+        effacerErreurAjout();
+        verifierFormulaire();
+    });
+}
+
 
 /* ETAPE 8.2 */
 
@@ -518,6 +552,7 @@ async function envoyerFormulaireAjout(event) {
 
     formAjout.reset();
     resetPreviewAjoutPhoto();
+    verifierFormulaire();
 
     fermerModale();
     
@@ -536,13 +571,16 @@ if (btnAjouterPhoto) {
         formAjout.reset();
         resetPreviewAjoutPhoto();
         await chargerCategoriesDansSelect();
+        verifierFormulaire();
     })
 }
+
+verifierFormulaire();
 /* FIN DE L'ETAPE 8.1 */
 
 
     function demarrer(){
-        if(galerie && filtres){ /* on charge les travaux uniquement sur la page d'acceuil */
+        if(galerie && filtres){ /* je charge les travaux uniquement sur la page d'acceuil */
             chargementPage();
         }
         appliquerEtatConnexion();
