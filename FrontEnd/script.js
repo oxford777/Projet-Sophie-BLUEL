@@ -1,7 +1,7 @@
 const galerie = document.querySelector(".gallery");
 const filtres = document.getElementById("filtres");
 
-/* PAGE D'ACCUEIL */
+/* Je recupere les projets */
 async function obtenirDonneesServeur (){ 
     try{
         const reponseServeur = await fetch ("http://localhost:5678/api/works"); 
@@ -16,12 +16,13 @@ async function obtenirDonneesServeur (){
     }
 }
 
+/* Affichage des projets dans la galerie */
 function afficherElementsDansPage (afficherDonnees){ 
     galerie.innerHTML = ""; 
 
     afficherDonnees.forEach(visuels => { 
         const figure = document.createElement("figure"); 
-        figure.dataset.id = visuels.id; /* etape 7 */
+        figure.dataset.id = visuels.id; /* etape 7 : utiliser pour supprimer le bon projet*/
 
         const image = document.createElement("img"); 
             image.src = visuels.imageUrl; 
